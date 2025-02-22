@@ -1,0 +1,27 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .info {
+        display: grid;
+        width: 1000px;
+        grid-template-columns: fit-content(100px) 200px;
+        gap:2px;
+      }
+      input[type='submit'] {
+        grid-column: 1/-1;
+      }
+    </style>
+  </head>
+  <body>
+    <form class="info" method="post">
+      <label for="forename">Forename:</label>
+      <input id="forename" name="forename" />
+      <label for="surname">Surname:</label>
+      <input id="surname" name="surname" />
+      <input type="submit" />
+    </form>
+  </body>
+</html>
