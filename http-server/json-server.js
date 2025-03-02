@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { error, get } = require('./utils');
+const { error } = require('./utils');
 
 const form = fs.readFileSync(path.join(__dirname, 'public', 'form.html'));
 const success = fs.readFileSync(path.join(__dirname, 'public', 'success.html'));
@@ -21,8 +21,9 @@ const server = http.createServer((req, res) => {
 server.listen(3000);
 
 
+
 function post(req, res) {
-  if (req.headers['content-type'] !== 'application/x-www-form-urlencoded') {
+  if (req.headers['content-type'] !== 'application/json') {
     error(415, res);
     return;
   }
@@ -32,10 +33,17 @@ function post(req, res) {
     input += data.toString();
   });
   res.writeHead(200, {
-    'Content-Type': 'text/html',
+    'Content-Type': 'application/json',
   });
   req.on('end', () => {
     console.log(input);
-    res.end(success);
+    const parsed = JSON.parse(input);
+    if(parsed.err){
+      error("Bad Request", 400);
+      return;
+    }
+
+    console.log("Received data: ", parsed);
+    res.end('{"data": ' + input + "}");
   });
 }

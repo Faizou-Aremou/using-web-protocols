@@ -8,7 +8,7 @@
         display: grid;
         width: 1000px;
         grid-template-columns: fit-content(100px) 200px;
-        gap:2px;
+        gap: 2px;
       }
       input[type='submit'] {
         grid-column: 1/-1;
@@ -23,5 +23,27 @@
       <input id="surname" name="surname" />
       <input type="submit" />
     </form>
+    <script>
+      document.forms[0].addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        let data = {
+          forename: document.querySelector('#forename').value,
+          surname: document.querySelector('#surname').value,
+        };
+
+        console.log('data', data);
+        fetch('http://localhost:3000', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        }).then((response) => {
+          console.log(response);
+          return response.json();
+        });
+      });
+    </script>
   </body>
 </html>
