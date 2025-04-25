@@ -25,6 +25,13 @@ module.exports = async function (fastify, opts) {
     dir: path.join(__dirname, 'routes'),
     options: Object.assign({}, opts)
   })
+  fastify.setNotFoundHandler((request, reply)=> {
+    if(request.method !== 'GET'){
+      reply.status(405);
+      return 'method Not Allowed\n'
+    }
+    return 'Not found\n'
+  })
 }
 
 module.exports.options = options
