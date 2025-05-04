@@ -1,0 +1,14 @@
+{
+  "name": "labs-2",
+  "scripts": {
+    "start": "echo \"TODO: SET THE START SCRIPT\" && exit 1",
+    "dev": "fastify start -w -l info -P app.js"
+  },
+  "dependencies": {
+    "@fastify/autoload": "^6.3.0",
+    "@fastify/sensible": "^6.0.3",
+    "fastify": "^5.3.2",
+    "fastify-cli": "^7.4.0",
+    "fastify-plugin": "^5.0.1"
+  }
+}

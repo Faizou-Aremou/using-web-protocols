@@ -3,6 +3,9 @@
 const path = require('node:path')
 const AutoLoad = require('@fastify/autoload')
 
+
+const dev = process.env.NODE_ENV !== 'production'
+const fastifyStatic = dev && require('@fastify/static')
 // Pass --options via CLI arguments in command to enable these options.
 const options = {}
 
@@ -14,6 +17,12 @@ module.exports = async function (fastify, opts) {
   // This loads all plugins defined in plugins
   // those should be support plugins that are reused
   // through your application
+
+  if(dev){
+    fastify.register(fastifyStatic, {
+      root:path.join(__dirname, 'public')
+    })
+  }
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'plugins'),
     options: Object.assign({}, opts)
