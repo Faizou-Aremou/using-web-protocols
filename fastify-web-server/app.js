@@ -1,46 +1,44 @@
-'use strict'
+'use strict';
 
-const path = require('node:path')
-const AutoLoad = require('@fastify/autoload')
-
-
-const dev = process.env.NODE_ENV !== 'production'
-const fastifyStatic = dev && require('@fastify/static')
+const path = require('node:path');
+const AutoLoad = require('@fastify/autoload');
+const pointOfView = require('point-of-view');
+const handlebars = require('handlebars')
+const dev = process.env.NODE_ENV !== 'production';
+const fastifyStatic = dev && require('@fastify/static');
 // Pass --options via CLI arguments in command to enable these options.
-const options = {}
+const options = {};
 
 module.exports = async function (fastify, opts) {
-  // Place here your custom code!
+  fastify.register(pointOfView, {
+    engine: { handlebars },
+    root: path.join(__dirname, 'views'),
+    layout: 'layout.hbs',
+  });
 
-  // Do not touch the following lines
-
-  // This loads all plugins defined in plugins
-  // those should be support plugins that are reused
-  // through your application
-
-  if(dev){
-    fastify.register(fastifyStatic, {
-      root:path.join(__dirname, 'public')
-    })
-  }
+  // if (dev) {
+  //   fastify.register(fastifyStatic, {
+  //     root: path.join(__dirname, 'public'),
+  //   });
+  // }
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'plugins'),
-    options: Object.assign({}, opts)
-  })
+    options: Object.assign({}, opts),
+  });
 
   // This loads all plugins defined in routes
   // define your routes in one of these
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'routes'),
-    options: Object.assign({}, opts)
-  })
-  fastify.setNotFoundHandler((request, reply)=> {
-    if(request.method !== 'GET'){
+    options: Object.assign({}, opts),
+  });
+  fastify.setNotFoundHandler((request, reply) => {
+    if (request.method !== 'GET') {
       reply.status(405);
-      return 'method Not Allowed\n'
+      return 'method Not Allowed\n';
     }
-    return 'Not found\n'
-  })
-}
+    return 'Not found\n';
+  });
+};
 
-module.exports.options = options
+module.exports.options = options;
